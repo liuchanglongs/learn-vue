@@ -1,0 +1,19 @@
+
+
+	
+
+
+进入mongo：mongo
+查看数据库：show dbs
+创建数据库：use demo
+创建集合：db.createCollection("users")；
+插入文档：db.users.insertMany([{id:"44",age:8},{id:88,age:9999}])
+         db.users.insertOne({})
+
+查看所有文档：db.users.find()
+查看某一条文档：db.users.find({})
+更新文档： db.users.update({age:{$gte:8}},{$set:{age:66}},false,true)         
+删除文档：
+
+
+

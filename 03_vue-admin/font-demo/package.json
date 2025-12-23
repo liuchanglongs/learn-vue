@@ -1,0 +1,30 @@
+{
+  "name": "font-demo",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --mode dev",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "element-plus": "^2.2.5",
+    "moment": "^2.29.3",
+    "screenfull": "^6.0.2",
+    "unplugin-icons": "^0.14.3",
+    "vite": "^2.9.9",
+    "vite-plugin-inspect": "^0.5.0",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.13",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@iconify-json/ep": "^1.1.5",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "sass": "^1.52.3",
+    "unplugin-auto-import": "^0.8.8",
+    "unplugin-vue-components": "^0.19.6",
+    "unplugin-vue-define-options": "^0.6.1"
+  }
+}

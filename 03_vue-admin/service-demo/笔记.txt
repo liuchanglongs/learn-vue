@@ -1,0 +1,8 @@
+1、koa2框架：koa2 + 项目名
+
+2、打印日志插件：log4js
+
+3、连接数据库插件：mongoose
+
+4、ctx：post->ctx.requext.body
+        get->ctx.request.query\ctx.request.params

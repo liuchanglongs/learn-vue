@@ -1,0 +1,236 @@
+1、独立的功能推荐用compotion APi
+
+2、vite不会编译es6语法
+
+3、yarn create @vitejs/app font-demo
+   yarn add vue-router@next vuex@next element-plus axios -S
+   yarn add sass -D
+   
+3、webpack项目获取环境变量：process.env
+   vite：import.meta.env
+   package.json: "dev": "vite --mode dev" 模拟环境
+    
+4、模块化：<script type="module" src="/src/main.js"></script>
+
+5、搭建项目->构建项目目录->插件安装->配置环境变量->公共函数封装->公共样式->页面骨架构建
+
+6、移动渐变：transition: property duration timing-function delay;
+
+7、页面搭建->mock数据->接口联调
+
+6、element plus得组件、icon组件自动导入
+
+7、setup有2个参数：props、context（attrs、emit、expose、slots）
+
+8、响应式：
+Vue3 中 ref 和 reactive 都是深度监听 --->如果数据量比较大，非常消耗性能。
+ref：返回一个响应式对象--->{{会自动解包}}
+unref(ref):isRef(val) ? val.value : val 的语法糖
+toRef：可以用来为源响应式对象上的某个 property 新创建一个 ref。然后，ref 可以被传递，它会保持对其源 property 的响应式连接（修改都会产生改变）。
+const state = reactive({
+  foo: 1,
+  bar: 2
+})
+const fooRef = toRef(state, 'foo')
+fooRef.value++
+console.log(state.foo) // 2
+state.foo++
+console.log(fooRef.value) // 3
+
+toRefs:将响应式对象转换为普通对象，其中结果对象的每个 property 都是指向原始对象相应 property 的 ref,
+组件就可以在不丢失响应性的情况下对返回的对象进行解构/展开  const {foo, bar} = toRefs(state)
+isRef:检查值是否为一个 ref 对象
+customRef:防抖
+
+处理数据量大时：
+shallowReactive：只处理对象最外层属性的响应式（浅响应式）。直接修改不是一层数据，不会响应页面，但是先更改第一层，然后在更改其他层就会成功。
+import { reactive, ref, shallowReactive, watchEffect, markRaw, toRef, toRefs, readonly, customRef, unref } from 'vue'
+export default {
+  setup () {
+    let state = shallowReactive({
+      a: 'a',
+      b: {
+        b1: "b1",
+        c: {
+          c1: "c1",
+          d1: {
+            e1: "e1",
+            f1: {
+              f1: "f1"
+            }
+          }
+        }
+      }
+    })
+    function func1 () {
+      state.a="啊啊啊"
+      state.b.c.d1.f1.f1="f1f1f1f1"
+    }
+    return { state, func1 }
+  },
+}
+
+shallowRef：只监听value的值。triggerRef:直接修改某一层级的值
+  setup () {
+    let state = shallowRef({
+      a: 'a',
+      b: {
+        b1: "b1",
+        c: {
+          c1: "c1",
+          d1: {
+            e1: "e1",
+            f1: {
+              f1: "f1"
+            }
+          }
+        }
+      }
+    })
+    function func1 () {
+      state.value.b.c.d1="啊啊啊"
+      triggerRef(state)
+    }
+
+返回对象的响应式副本 -> reactive：会解包所有深层的 refs，同时维持 ref 的响应性
+接受一个对象(响应式或纯对象)或ref -> readonly： 会解包所有深层的 refs、深层的都只是可读。
+isProxy:检查对象是否是由 reactive 或 readonly 创建的 proxy
+isReactive:检查对象是否包含由 reactive 创建的响应式代理。
+isReadonly：检查对象是否是由 readonly 创建的只读代理。
+
+toRaw:返回 reactive 或 readonly 代理的原始对象, 阻断与页面实时更新的连接，但数据都会被改变。
+    let obj={name:'lj',age:18}
+    let state=reactive(obj)
+    let obj2=toRaw(state)   
+    console.log(obj===obj2); //true
+    function myFn(){
+      obj2.name='zs'
+      console.log(state); //Proxy {name: "zs", age: 18}
+      console.log(obj2);  //{name: "zs", age: 18}
+    }
+
+markRaw: 没搞懂。 整个对象被包裹，不会再成为响应式。
+
+shallowReactive: 创建一个响应式代理，但不执行嵌套对象的深层响应式转换(深层不是响应式、不会给ref自动解包)
+shallowReadonly：只读，但不执行嵌套对象的深度只读转换 (不会给ref自动解包)
+
+使用 <script setup> 的组件是默认关闭的，也即通过模板 ref 或者 $parent 链获取到的组件的公开实例，不会暴露任何在 <script setup> 中声明的绑定
+
+
+vue3api\router\vuex自动引入： unplugin-auto-import
+element plus组件自动导入：unplugin-auto-import、unplugin-vue-components
+element plusicon自动导入: unplugin-icons
+
+
+给每个组件取name：使用插件---》unplugin-vue-define-options
+
+主页布局：flex + 过渡动画 : 过渡的时候右侧部分会闪动，给每个width改变时加上transition
+左侧边栏递归组件的样式问题：递归组件多了div导致样式出问题
+解决：1、vue3中，该递归组件不要跟组件
+      2、隐藏文字与icon
+      // ::v-deep.el-menu--collapse {
+        //   .treeMenu {
+        //     .el-sub-menu {
+        //      .el-tooltip__trigger {
+        //         /*隐藏 > */
+        //         span {
+        //           display: none;
+        //         }
+        //         .el-submenu__icon-arrow {
+        //           display: none;
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
+左侧折叠后：出现白色竖杠未解决
+
+左侧列表：递归组件
+面包屑：
+      1、实现当前url路由记录用route.matched。
+      2、记录左侧点击记录：创建点击记录数组，渲染面包屑
+
+jwt:跨域认证解决方案
+    组成：Header(加密算法:HS256,形式JWT).Payload(签发人、过期时间、自定义数据等).
+    Signature（base64加密Header 通过. 连接base64加密Payload，得到字符串然后进行对称加密、非对称加密）
+前端使用方式：
+    1、/api?token=xxx
+    2、cookie写入token
+    3、storage写入token，请求头添加Authorization：Bearer<token>
+
+axios:return一个promise报错 Cannot read properties of null (reading 'parentNode')
+
+element plus：table的formatter ->过滤数据：枚举-->代替if
+    formatter:(row, column, value)=>{
+      return {
+        1: "在职",
+        2: "离职",
+        3: "试用期",
+      }[value];
+    },
+
+vscode: 保存格式化代码----> "editor.formatOnSave": true
+}
+
+
+this.$nextTick 与表单时重设:表单重设到初始化的时候的值。this.$nextTick：dom更新完后，在执行里面的代码。
+es6的结构语法：const { _id, action, ...params } = ctx.request.body;
+item.parentId.slice().pop()：
+('00' + val).substr(val.length));
+'00' 《 val :前面补0
+val：2位为本身
+
+权限：RBAC->用户 角色  权限
+菜单权限、按钮权限、数据权限
+工作流：
+      角色：发起人、审批人
+      场景：请假、出差
+      节点： 审核节点、多节点
+      环节：审核单环节、多环节
+      必要信息：申请理由、时长
+      通知：申请人、审核人
+      操作：未审批、驳回、已审批
+
+后台：返回menu(一颗树，包括，每个menu下面的菜单)
+登录-》解析token-》根据角色返回menu以及菜单）
+
+递归：
+const deep = (arr) => {
+  while (arr.length) {  // while:0停止循环，其他正数无线循环。item = arr.pop();控制
+    let item = arr.pop();  // 该数组要深拷贝
+    // if (item.action) {
+    //   item.action.map(action => {
+    //     actionList.push(action.menuCode)
+    //   })
+    // }
+    // if (item.children && !item.action) {
+    //   deep(item.children)
+    // }
+  }
+}
+deep(arry)
+
+动态路由：
+        一、有token
+            1、路由将要去/login，直接next();
+            2、路由不将要去/login
+              (1)、vuex的menuList存在，直接next();
+              (2)、vuex的menuList长度等于0，不存在
+                  一、请求得到menuList，与本地路由相匹配，addRoute动态注册路由，给vuex的相关的值赋值
+                  注意：一定要在路由守卫里面请求。不然next()，会在请求之前先执行。导致有路由，确匹配不到
+                  二、请求menuList错误，直接 next({ path: "/login" })，store.commit("signOut")
+        二、无token
+            1、isAuthorization===false, 直接next()
+            2、isAuthorization===true, 直接next({ path: "/login" })
+             store.commit("signOut")：清空vuex相关的值、清空动态路由、清空localStorage
+router: 
+      removeRoute(name):移除dom
+      hasRoute(name):是否有router
+      currentRoute：当前路由
+      getRoutes():得到所有路由
+useRoute(): 
+          matched:得到在当前的路由经过的路由
+
+全屏使用：screenfull插件
+自定义主题：vue2自定义scss文件，引入变量修改（官网）。
+           修改怎个系统的主题：通过变量控制颜色8进制。然后使用行内样式，引入变量

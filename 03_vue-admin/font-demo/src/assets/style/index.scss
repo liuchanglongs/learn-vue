@@ -1,0 +1,86 @@
+html, body {
+  height: 100%;
+  width: 100%;
+}
+*:not([class^='el-']) {
+  box-sizing: border-box;
+}
+.white{
+  background-color: #ffffff;
+}
+a{
+  text-decoration: none;
+}
+.gray{
+  background-color: #eef0f3;
+}
+.mr10{
+  margin-right: .7143rem;
+}
+.mr20{
+  margin-right: 1.4286rem;
+}
+.mb20{
+  margin-bottom: 1.4286rem;
+}
+.m-lr10{
+  margin-left: .7143rem;
+  margin-right: .7143rem;
+}
+.p20{
+  padding: 1.4286rem;
+}
+.pl20{
+  padding-left: 1.4286rem;
+}
+.text-right{
+  text-align: right;
+}
+.fr{
+  float: right;
+}
+.flex{
+  display: flex;
+}
+.flex-between{
+  display: flex;
+  justify-content: space-between;
+}
+.flex-center{
+  display: flex;
+  justify-content: center;
+}
+.tips{
+  margin-left: 1.0714rem;
+  color: #787878;
+}
+
+
+/*
+* 公共样式
+*/
+.query-form {
+  background-color: #ffffff;
+  padding: 1.5714rem 1.4286rem 0;
+  border-radius: .3571rem;
+}
+.base-table {
+  border-radius: .3571rem;
+  background: #ffffff;
+  margin-top: 1.4286rem;
+  margin-bottom: 1.4286rem;
+  .action {
+    border-radius: .3571rem .3571rem 0rem 0rem;
+    background: #ffffff;
+    padding: 1.4286rem;
+    border-bottom: .0714rem solid #ece8e8;
+  }
+  .base-pagination{
+    display: flex;
+    justify-content: right;
+  }
+  .pagination {
+    text-align: right;
+    padding: 1rem;
+  }
+}
