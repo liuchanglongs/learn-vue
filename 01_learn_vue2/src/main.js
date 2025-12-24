@@ -24,6 +24,8 @@ import { createApp } from 'vue';
 // import App from './App.vue';
 
 // import App from './02_vue2补充知识/01.组件嵌套的生命周期/App.vue';
-import App from './02_vue2补充知识/02_mixin/index.vue';
+// import App from './02_vue2补充知识/02_mixin/index.vue';
+import App from './02_vue2补充知识/03.vm.$listeners/index.vue';
+
 
 createApp(App).mount('#app');
